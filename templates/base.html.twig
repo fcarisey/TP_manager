@@ -4,13 +4,57 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        <link href="{{ asset('storage/dist/css/tabler.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('storage/dist/css/demo.min.css') }}" rel="stylesheet">
         {% block stylesheets %}
-        {% endblock %}
-
-        {% block javascripts %}
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <div class="page">
+            <!-- Sidebar -->
+            <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="true" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="navbar-collapse collapse show" id="sidebar-menu" style="">
+                        <ul class="navbar-nav pt-lg-3">
+                            <li class="nav-item">
+                                <a class="nav-link" href="./">
+                                        <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 12l-2 0l9 -9l9 9l-2 0"></path><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path></svg>
+                                        </span>
+                                    <span class="nav-link-title">Home</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+            <div class="page-wrapper">
+                <!-- Page header -->
+                <div class="page-header d-print-none">
+                    <div class="container-xl">
+                        {% block header %}{% endblock %}
+                    </div>
+                </div>
+                <!-- Page body -->
+                <div class="page-body">
+                    <div class="container-xl">
+                        {% block body %}{% endblock %}
+                    </div>
+                </div>
+                <footer class="footer footer-transparent d-print-none">
+                    <div class="container-xl">
+                        {% block footer %}{% endblock %}
+                    </div>
+                </footer>
+            </div>
+        </div>
     </body>
+    <script src="{{ asset('storage/dist/js/tabler.min.js') }}" defer=""></script>
+    <script src="{{ asset('storage/dist/js/demo.min.js') }}" defer=""></script>
+    {% block javascript %}
+    {% endblock %}
 </html>
