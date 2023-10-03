@@ -22,12 +22,12 @@ class Classe
     private Collection $utilisateurs;
 
     #[ORM\OneToMany(mappedBy: 'classe_id', targetEntity: TP::class)]
-    private Collection $tPs;
+    private Collection $tps;
 
     public function __construct()
     {
         $this->utilisateurs = new ArrayCollection();
-        $this->tPs = new ArrayCollection();
+        $this->tps = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -89,13 +89,13 @@ class Classe
      */
     public function getTPs(): Collection
     {
-        return $this->tPs;
+        return $this->tps;
     }
 
     public function addTP(TP $tP): static
     {
-        if (!$this->tPs->contains($tP)) {
-            $this->tPs->add($tP);
+        if (!$this->tps->contains($tP)) {
+            $this->tps->add($tP);
             $tP->setClasseId($this);
         }
 
@@ -104,7 +104,7 @@ class Classe
 
     public function removeTP(TP $tP): static
     {
-        if ($this->tPs->removeElement($tP)) {
+        if ($this->tps->removeElement($tP)) {
             // set the owning side to null (unless already changed)
             if ($tP->getClasseId() === $this) {
                 $tP->setClasseId(null);
