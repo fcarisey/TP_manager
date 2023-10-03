@@ -36,9 +36,12 @@ class Utilisateur
     #[ORM\ManyToMany(targetEntity: Tache::class, mappedBy: 'utilisateurs')]
     private Collection $taches;
 
+    private ?string $displayedName = null;
+
     public function __construct()
     {
         $this->taches = new ArrayCollection();
+        $this->displayedName = $this->prenom . ' ' . $this->nom;
     }
 
     public function getId(): ?int
