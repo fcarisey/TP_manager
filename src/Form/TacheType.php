@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Form;
+
+use App\Entity\Tache;
+use App\Entity\TP;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class TacheType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('ordre')
+            ->add('point')
+            ->add('description')
+            ->add('TP_id', EntityType::class, [
+                'class' => TP::class,
+                'choice_label' => 'titre',
+                'required' => true
+            ])
+            ->add('utilisateurs') // À revoir avec l'état de la complétion de la tache
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Tache::class,
+        ]);
+    }
+}
