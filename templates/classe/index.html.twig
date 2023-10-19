@@ -14,36 +14,14 @@
 {% endblock %}
 
 {% block body %}
-    {% include 'classe/tabs/home.html.twig' %}
-    {% include 'classe/tabs/stats.html.twig' %}
+    <div class="subpages">
+        {% include 'classe/tabs/home.html.twig' %}
+        {% include 'classe/tabs/stats.html.twig' %}
+    </div>
 {% endblock %}
 
 {% block javascript %}
-<script lang="js">
-
-    let tabs = document.getElementById('subtabs').children[0].children;
-
-    Array.from(tabs).forEach(tab => {
-        tab.addEventListener('click', e => {
-
-            let timeout = setInterval(switchSubTab, 100)
-
-            setTimeout(() => {
-                clearTimeout(timeout)
-            }, 100)
-        })
-    })
-
-    function switchSubTab(){
-        const hash = window.location.hash.slice(1)
-
-        Array.from(tabs).forEach(tab => {
-            document.getElementById(tab.children[0].href.split('#')[1]).display = "none"
-        })
-
-        document.getElementById(hash).display = "block"
-    }
-</script>
+<script src="{{ asset('storage/assets/js/subtabs.js') }}" lang="js"></script>
 
 {% endblock %}
 
