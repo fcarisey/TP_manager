@@ -2,19 +2,49 @@
 
 {% block title %}Hello ClasseController!{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block header %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <nav class="nav navbar" id="subtabs">
+        <ul class="list-unstyled flex-row">
+            <li><a class="nav-link" href="#home">Accueil</a></li>
+            <li><a class="nav-link" href="#stats">Stats</a></li>
+        </ul>
+    </nav>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/fcari/PhpstormProjects/TP_manager/src/Controller/ClasseController.php'|file_link(0) }}">src/Controller/ClasseController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/fcari/PhpstormProjects/TP_manager/templates/classe/index.html.twig'|file_link(0) }}">templates/classe/index.html.twig</a></code></li>
-    </ul>
-</div>
 {% endblock %}
+
+{% block body %}
+    {% include 'classe/tabs/home.html.twig' %}
+    {% include 'classe/tabs/stats.html.twig' %}
+{% endblock %}
+
+{% block javascript %}
+<script lang="js">
+
+    let tabs = document.getElementById('subtabs').children[0].children;
+
+    Array.from(tabs).forEach(tab => {
+        tab.addEventListener('click', e => {
+
+            let timeout = setInterval(switchSubTab, 100)
+
+            setTimeout(() => {
+                clearTimeout(timeout)
+            }, 100)
+        })
+    })
+
+    function switchSubTab(){
+        const hash = window.location.hash.slice(1)
+
+        Array.from(tabs).forEach(tab => {
+            document.getElementById(tab.children[0].href.split('#')[1]).display = "none" +
+    ""
+        })
+
+        document.getElementById(hash).display = "block"
+    }
+</script>
+
+{% endblock %}
+
