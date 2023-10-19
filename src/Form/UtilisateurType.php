@@ -17,6 +17,7 @@ class UtilisateurType extends AbstractType
     {
         $builder
             ->add('nom')
+
             ->add('prenom')
             ->add('motDePasse', PasswordType::class)
             ->add('courriel', EmailType::class)
