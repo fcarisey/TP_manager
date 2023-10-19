@@ -38,8 +38,7 @@
         const hash = window.location.hash.slice(1)
 
         Array.from(tabs).forEach(tab => {
-            document.getElementById(tab.children[0].href.split('#')[1]).display = "none" +
-    ""
+            document.getElementById(tab.children[0].href.split('#')[1]).display = "none"
         })
 
         document.getElementById(hash).display = "block"
