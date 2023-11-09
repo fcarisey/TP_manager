@@ -46,9 +46,9 @@ class UtilisateurController extends AbstractController
             ->addOrderBy('u.prenom', 'ASC');
 
         foreach ($s_exploded as $s_exploded_item) {
-            $query->orWhere('u.nom = :s_exploded_item')
-                ->orWhere('u.prenom = :s_exploded_item')
-                ->setParameter('s_exploded_item', $s_exploded_item);
+            $query->orWhere('u.nom LIKE :s_exploded_item')
+                ->orWhere('u.prenom LIKE :s_exploded_item')
+                ->setParameter('s_exploded_item', '%' . $s_exploded_item . '%');
         }
 
         $utilisateurs = $query->getQuery()->execute();
