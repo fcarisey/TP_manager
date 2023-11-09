@@ -6,9 +6,10 @@ use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur
+class Utilisateur implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -136,7 +137,7 @@ class Utilisateur
         return $this->taches;
     }
 
-    public function addTach(Tache $tach): static
+    public function addTache(Tache $tach): static
     {
         if (!$this->taches->contains($tach)) {
             $this->taches->add($tach);
@@ -146,12 +147,22 @@ class Utilisateur
         return $this;
     }
 
-    public function removeTach(Tache $tach): static
+    public function removeTache(Tache $tach): static
     {
         if ($this->taches->removeElement($tach)) {
             $tach->removeUtilisateur($this);
         }
 
         return $this;
+    }
+
+    public function jsonSerialize(): array{
+        return [
+            'id' => $this->id,
+            'nom' => $this->nom,
+            'prenom' => $this->prenom,
+            'courriel' => $this->courriel,
+            'role' => $this->role,
+        ];
     }
 }
