@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col">
                 <div class="row mb-1">
-                    <form action="/#search" method="get" class="col-4" autocomplete="off" novalidate="">
+                    <form name="search" method="get" class="col-4" autocomplete="off" novalidate="">
                         <div class="input-icon">
                             <input type="text" value="" class="form-control" placeholder="Recherche…" aria-label="Recherche une classe">
                             <span class="input-icon-addon">
@@ -18,7 +18,7 @@
                         </svg>
                     </a>
                 </div>
-                <table class="table table-vcenter card-table table-striped">
+                <table class="table table-vcenter card-table table-striped" id="search_table">
                     <thead>
                     <tr>
                         <th>Prénom</th>
@@ -142,3 +142,56 @@
         </div>
     </div>
 </div>
+
+<script lang="js">
+    const form = document.forms.search;
+    const table = document.getElementById('search_table').cloneNode(true);
+    const tableDataCopy = table.children[1].innerHTML;
+    const tableParent = table.parentNode;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+    });
+
+    form.addEventListener('keyup', (e) => {
+        e.preventDefault();
+
+        let value = e.target.value;
+
+        value = value.trim();
+
+        if (value.length > 2) {
+            fetch('/utilisateur/search?s=' + value, {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    // replace table data with new data
+                    table.children[1].innerHTML = '';
+
+                    data.forEach((item) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${item.prenom}</td>
+                            <td>${item.nom}</td>
+                            <td class="text-secondary"><a href="#" class="text-reset"><b>${item.classe}</b></a></td>
+                            <td>
+                                <a href="#">Modifier</a>
+                            </td>
+                            <td>
+                                <a href="#" class="text-red">Supprimer</a>
+                            </td>
+                        `;
+
+                        table.children[1].insertAdjacentElement('beforeend', row);
+                    });
+                })
+                .catch(error => console.log(error));
+        }else{
+            table.children[1].innerHTML = tableDataCopy;
+        }
+
+    });
+</script>
