@@ -1,4 +1,4 @@
-let tabs = document.getElementById('subtabs').children[0].children;
+let tabs = document.getElementById('subtabs').children;
 
 Array.from(tabs).forEach(tab => {
     tab.addEventListener('click', e => {
