@@ -32,7 +32,7 @@ class UtilisateurController extends AbstractController
     }
 
     #[Route('/utilisateur/search', name: 'app_utilisateur_search')]
-    public function search(Request $request): string
+    public function search(Request $request, UtilisateurRepository $utilisateurRepository): Response
     {
         $s = $request->query->get('s');
 
@@ -41,14 +41,18 @@ class UtilisateurController extends AbstractController
 
         $s_exploded = explode(' ', $s);
 
-//        // find user from nom, prenom
-//        (new UtilisateurRepository)->findBy()
-//        $users = $this->getDoctrine()->getRepository('App:Utilisateur')->findByNomPrenom($s_exploded);
-//        if (count($users) > 0)
-//            return json_encode($users);
-//
-//        return json_encode(['error' => 'Aucun utilisateur trouvé']);
+        $query = $utilisateurRepository->createQueryBuilder('u')
+            ->orderBy('u.nom', 'ASC')
+            ->addOrderBy('u.prenom', 'ASC');
 
+        foreach ($s_exploded as $s_exploded_item) {
+            $query->orWhere('u.nom = :s_exploded_item')
+                ->orWhere('u.prenom = :s_exploded_item')
+                ->setParameter('s_exploded_item', $s_exploded_item);
+        }
 
+        $utilisateurs = $query->getQuery()->execute();
+
+        return new Response(json_encode($utilisateurs) , 200);
     }
 }
