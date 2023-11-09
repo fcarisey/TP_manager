@@ -17,7 +17,6 @@ class UtilisateurType extends AbstractType
     {
         $builder
             ->add('nom')
-
             ->add('prenom')
             ->add('motDePasse', PasswordType::class)
             ->add('courriel', EmailType::class)
@@ -26,9 +25,7 @@ class UtilisateurType extends AbstractType
                 'class' => Classe::class,
                 'choice_label' => 'designation',
                 'required' => false
-            ])
-            ->add('taches') // À revoir avec l'état de la complétion de la tache
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
