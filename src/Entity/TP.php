@@ -26,7 +26,7 @@ class TP
     private ?string $fichier = null;
 
     #[ORM\ManyToOne(inversedBy: 'tPs')]
-    private ?Classe $classe_id = null;
+    private ?Classe $asse_id = null;
 
     #[ORM\OneToMany(mappedBy: 'TP_id', targetEntity: Tache::class)]
     private Collection $taches;
@@ -92,12 +92,12 @@ class TP
 
     public function getClasseId(): ?Classe
     {
-        return $this->classe_id;
+        return $this->classe_id_id;
     }
 
-    public function setClasseId(?Classe $classe_id): static
+    public function setClasseId(?Classe $classe_id_id): static
     {
-        $this->classe_id = $classe_id;
+        $this->classe_id_id = $classe_id_id;
 
         return $this;
     }

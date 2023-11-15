@@ -27,7 +27,7 @@ class TPType extends AbstractType
             ->add('date_fin', DateTimeType::class, [
                 'required' => false
             ])
-            ->add('classe_id', EntityType::class, [
+            ->add('classe_id_id', EntityType::class, [
                 'class' => Classe::class,
                 'choice_label' => 'designation',
                 'required' => true

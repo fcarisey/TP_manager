@@ -20,13 +20,13 @@ class UtilisateurType extends AbstractType
             ->add('prenom')
             ->add('motDePasse', PasswordType::class)
             ->add('courriel', EmailType::class)
-            ->add('role');
-//            ->add('classe_id', EntityType::class, [
-//                'class' => Classe::class,
-//                'choice_label' => 'designation',
-//                'required' => false,
-//                'placeholder' => 'Sélectionnez une classe'
-//            ]);
+            ->add('role')
+            ->add('classe_id_id', EntityType::class, [
+                'class' => Classe::class,
+                'choice_label' => 'designation',
+                'required' => false,
+                'placeholder' => 'Sélectionnez une classe'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Utilisateur;
 use App\Form\UtilisateurType;
 use App\Repository\UtilisateurRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,6 +22,7 @@ class UtilisateurController extends AbstractController
             $utilisateur = $form->getData();
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($utilisateur);
+            $entityManager->save($utilisateur);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_utilisateur');
@@ -32,7 +34,7 @@ class UtilisateurController extends AbstractController
     }
 
     #[Route('/utilisateur/search', name: 'app_utilisateur_search')]
-    public function search(Request $request, UtilisateurRepository $utilisateurRepository): Response
+    public function search(Request $request, UtilisateurRepository $utilisateurRepository): bool|string
     {
         $s = $request->query->get('s');
 
