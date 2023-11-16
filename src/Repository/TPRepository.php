@@ -21,6 +21,16 @@ class TPRepository extends ServiceEntityRepository
         parent::__construct($registry, TP::class);
     }
 
+    public function save(TP $entity, bool $flush = false) : void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+
 //    /**
 //     * @return TP[] Returns an array of TP objects
 //     */
