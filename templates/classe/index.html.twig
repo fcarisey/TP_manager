@@ -1,20 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ClasseController!{% endblock %}
+{% block title %}Classe{% endblock %}
+
+{% block header %}
+
+    <nav class="nav navbar justify-content-start" id="subtabs">
+        <li><a class="nav-link" href="#home">Accueil</a></li>
+        <li><a class="nav-link" href="#stats">Stats</a></li>
+    </nav>
+
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/fcari/PhpstormProjects/TP_manager/src/Controller/ClasseController.php'|file_link(0) }}">src/Controller/ClasseController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/fcari/PhpstormProjects/TP_manager/templates/classe/index.html.twig'|file_link(0) }}">templates/classe/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div class="subpages">
+        {% include 'classe/tabs/home.html.twig' %}
+        {% include 'classe/tabs/stats.html.twig' %}
+    </div>
 {% endblock %}
+
+{% block script %}
+    <script src="{{ asset('storage/assets/js/subtabs.js') }}" lang="js"></script>
+{% endblock %}
+

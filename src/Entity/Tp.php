@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\TPRepository;
+use App\Repository\TpRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TPRepository::class)]
-class TP
+#[ORM\Entity(repositoryClass: TpRepository::class)]
+class Tp
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,20 +22,20 @@ class TP
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $fichier = null;
-
-    #[ORM\ManyToOne(inversedBy: 'tPs')]
-    private ?Classe $classe_id = null;
-
-    #[ORM\OneToMany(mappedBy: 'TP_id', targetEntity: Tache::class)]
-    private Collection $taches;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_debut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_fin = null;
+
+    #[ORM\Column(type: Types::BLOB, nullable: true)]
+    private $fichier = null;
+
+    #[ORM\ManyToOne(inversedBy: 'tps')]
+    private ?Classe $classe = null;
+
+    #[ORM\OneToMany(mappedBy: 'tp', targetEntity: Tache::class, orphanRemoval: true)]
+    private Collection $taches;
 
     public function __construct()
     {
@@ -45,13 +45,6 @@ class TP
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getTitre(): ?string
@@ -78,60 +71,6 @@ class TP
         return $this;
     }
 
-    public function getFichier(): ?string
-    {
-        return $this->fichier;
-    }
-
-    public function setFichier(?string $fichier): static
-    {
-        $this->fichier = $fichier;
-
-        return $this;
-    }
-
-    public function getClasseId(): ?Classe
-    {
-        return $this->classe_id;
-    }
-
-    public function setClasseId(?Classe $classe_id): static
-    {
-        $this->classe_id = $classe_id;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Tache>
-     */
-    public function getTaches(): Collection
-    {
-        return $this->taches;
-    }
-
-    public function addTach(Tache $tach): static
-    {
-        if (!$this->taches->contains($tach)) {
-            $this->taches->add($tach);
-            $tach->setTPId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTach(Tache $tach): static
-    {
-        if ($this->taches->removeElement($tach)) {
-            // set the owning side to null (unless already changed)
-            if ($tach->getTPId() === $this) {
-                $tach->setTPId(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getDateDebut(): ?\DateTimeInterface
     {
         return $this->date_debut;
@@ -152,6 +91,60 @@ class TP
     public function setDateFin(?\DateTimeInterface $date_fin): static
     {
         $this->date_fin = $date_fin;
+
+        return $this;
+    }
+
+    public function getFichier()
+    {
+        return $this->fichier;
+    }
+
+    public function setFichier($fichier): static
+    {
+        $this->fichier = $fichier;
+
+        return $this;
+    }
+
+    public function getClasse(): ?Classe
+    {
+        return $this->classe;
+    }
+
+    public function setClasse(?Classe $classe): static
+    {
+        $this->classe = $classe;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tache>
+     */
+    public function getTaches(): Collection
+    {
+        return $this->taches;
+    }
+
+    public function addTach(Tache $tach): static
+    {
+        if (!$this->taches->contains($tach)) {
+            $this->taches->add($tach);
+            $tach->setTp($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTach(Tache $tach): static
+    {
+        if ($this->taches->removeElement($tach)) {
+            // set the owning side to null (unless already changed)
+            if ($tach->getTp() === $this) {
+                $tach->setTp(null);
+            }
+        }
 
         return $this;
     }

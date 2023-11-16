@@ -15,45 +15,35 @@ class Utilisateur
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $motDePasse = null;
+    private ?string $mot_de_passe = null;
 
     #[ORM\Column(length: 255)]
     private ?string $courriel = null;
 
+    #[ORM\ManyToOne(inversedBy: 'utilisateurs')]
+    private ?Classe $classe = null;
+
     #[ORM\Column(length: 50)]
     private ?string $role = null;
 
-    #[ORM\ManyToOne(inversedBy: 'utilisateurs')]
-    private ?Classe $classe_id = null;
-
-    #[ORM\ManyToMany(targetEntity: Tache::class, mappedBy: 'utilisateurs')]
-    private Collection $taches;
-
-    private ?string $displayedName = null;
+    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: TacheUtilisateur::class, orphanRemoval: true)]
+    private Collection $tacheUtilisateurs;
 
     public function __construct()
     {
-        $this->taches = new ArrayCollection();
-        $this->displayedName = $this->prenom . ' ' . $this->nom;
+        $this->tacheUtilisateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getNom(): ?string
@@ -82,12 +72,12 @@ class Utilisateur
 
     public function getMotDePasse(): ?string
     {
-        return $this->motDePasse;
+        return $this->mot_de_passe;
     }
 
-    public function setMotDePasse(string $motDePasse): static
+    public function setMotDePasse(string $mot_de_passe): static
     {
-        $this->motDePasse = $motDePasse;
+        $this->mot_de_passe = $mot_de_passe;
 
         return $this;
     }
@@ -104,6 +94,18 @@ class Utilisateur
         return $this;
     }
 
+    public function getClasse(): ?Classe
+    {
+        return $this->classe;
+    }
+
+    public function setClasse(?Classe $classe): static
+    {
+        $this->classe = $classe;
+
+        return $this;
+    }
+
     public function getRole(): ?string
     {
         return $this->role;
@@ -116,40 +118,31 @@ class Utilisateur
         return $this;
     }
 
-    public function getClasseId(): ?Classe
-    {
-        return $this->classe_id;
-    }
-
-    public function setClasseId(?Classe $classe_id): static
-    {
-        $this->classe_id = $classe_id;
-
-        return $this;
-    }
-
     /**
-     * @return Collection<int, Tache>
+     * @return Collection<int, TacheUtilisateur>
      */
-    public function getTaches(): Collection
+    public function getTacheUtilisateurs(): Collection
     {
-        return $this->taches;
+        return $this->tacheUtilisateurs;
     }
 
-    public function addTach(Tache $tach): static
+    public function addTacheUtilisateur(TacheUtilisateur $tacheUtilisateur): static
     {
-        if (!$this->taches->contains($tach)) {
-            $this->taches->add($tach);
-            $tach->addUtilisateur($this);
+        if (!$this->tacheUtilisateurs->contains($tacheUtilisateur)) {
+            $this->tacheUtilisateurs->add($tacheUtilisateur);
+            $tacheUtilisateur->setUtilisateur($this);
         }
 
         return $this;
     }
 
-    public function removeTach(Tache $tach): static
+    public function removeTacheUtilisateur(TacheUtilisateur $tacheUtilisateur): static
     {
-        if ($this->taches->removeElement($tach)) {
-            $tach->removeUtilisateur($this);
+        if ($this->tacheUtilisateurs->removeElement($tacheUtilisateur)) {
+            // set the owning side to null (unless already changed)
+            if ($tacheUtilisateur->getUtilisateur() === $this) {
+                $tacheUtilisateur->setUtilisateur(null);
+            }
         }
 
         return $this;

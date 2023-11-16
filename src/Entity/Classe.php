@@ -15,13 +15,13 @@ class Classe
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $designation = null;
 
-    #[ORM\OneToMany(mappedBy: 'classe_id', targetEntity: Utilisateur::class)]
+    #[ORM\OneToMany(mappedBy: 'classe', targetEntity: Utilisateur::class)]
     private Collection $utilisateurs;
 
-    #[ORM\OneToMany(mappedBy: 'classe_id', targetEntity: TP::class)]
+    #[ORM\OneToMany(mappedBy: 'classe', targetEntity: Tp::class)]
     private Collection $tps;
 
     public function __construct()
@@ -33,13 +33,6 @@ class Classe
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getDesignation(): ?string
@@ -66,7 +59,7 @@ class Classe
     {
         if (!$this->utilisateurs->contains($utilisateur)) {
             $this->utilisateurs->add($utilisateur);
-            $utilisateur->setClasseId($this);
+            $utilisateur->setClasse($this);
         }
 
         return $this;
@@ -76,8 +69,8 @@ class Classe
     {
         if ($this->utilisateurs->removeElement($utilisateur)) {
             // set the owning side to null (unless already changed)
-            if ($utilisateur->getClasseId() === $this) {
-                $utilisateur->setClasseId(null);
+            if ($utilisateur->getClasse() === $this) {
+                $utilisateur->setClasse(null);
             }
         }
 
@@ -85,29 +78,29 @@ class Classe
     }
 
     /**
-     * @return Collection<int, TP>
+     * @return Collection<int, Tp>
      */
-    public function getTPs(): Collection
+    public function getTps(): Collection
     {
         return $this->tps;
     }
 
-    public function addTP(TP $tP): static
+    public function addTp(Tp $tp): static
     {
-        if (!$this->tps->contains($tP)) {
-            $this->tps->add($tP);
-            $tP->setClasseId($this);
+        if (!$this->tps->contains($tp)) {
+            $this->tps->add($tp);
+            $tp->setClasse($this);
         }
 
         return $this;
     }
 
-    public function removeTP(TP $tP): static
+    public function removeTp(Tp $tp): static
     {
-        if ($this->tps->removeElement($tP)) {
+        if ($this->tps->removeElement($tp)) {
             // set the owning side to null (unless already changed)
-            if ($tP->getClasseId() === $this) {
-                $tP->setClasseId(null);
+            if ($tp->getClasse() === $this) {
+                $tp->setClasse(null);
             }
         }
 

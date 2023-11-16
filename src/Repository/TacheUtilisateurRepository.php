@@ -2,37 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\TP;
+use App\Entity\TacheUtilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<TP>
+ * @extends ServiceEntityRepository<TacheUtilisateur>
  *
- * @method TP|null find($id, $lockMode = null, $lockVersion = null)
- * @method TP|null findOneBy(array $criteria, array $orderBy = null)
- * @method TP[]    findAll()
- * @method TP[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method TacheUtilisateur|null find($id, $lockMode = null, $lockVersion = null)
+ * @method TacheUtilisateur|null findOneBy(array $criteria, array $orderBy = null)
+ * @method TacheUtilisateur[]    findAll()
+ * @method TacheUtilisateur[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TPRepository extends ServiceEntityRepository
+class TacheUtilisateurRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, TP::class);
+        parent::__construct($registry, TacheUtilisateur::class);
     }
-
-    public function save(TP $entity, bool $flush = false) : void
-    {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
 
 //    /**
-//     * @return TP[] Returns an array of TP objects
+//     * @return TacheUtilisateur[] Returns an array of TacheUtilisateur objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -46,7 +36,7 @@ class TPRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?TP
+//    public function findOneBySomeField($value): ?TacheUtilisateur
 //    {
 //        return $this->createQueryBuilder('t')
 //            ->andWhere('t.exampleField = :val')

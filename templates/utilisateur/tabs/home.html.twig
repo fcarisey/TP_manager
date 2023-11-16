@@ -1,0 +1,153 @@
+<div id="home">
+    <p>Accueil</p>
+    <div class="col">
+        <div class="row">
+            <div class="col">
+                <div class="row mb-1">
+                    <form name="search" method="get" class="col-4" autocomplete="off" novalidate="">
+                        <div class="input-icon">
+                            <input type="text" value="" class="form-control" placeholder="Recherche…" aria-label="Recherche une classe">
+                            <span class="input-icon-addon">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path><path d="M21 21l-6 -6"></path></svg>
+                            </span>
+                        </div>
+                    </form>
+                    <a href="#modal-create-user" data-bs-toggle="modal" data-bs-target="#modal-create-user" class="col-1 align-self-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path>
+                        </svg>
+                    </a>
+                </div>
+                <table class="table table-vcenter card-table table-striped" id="search_table">
+                    <thead>
+                    <tr>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>Classe</th>
+                        <th class="w-1"></th>
+                        <th class="w-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for user in users %}
+
+                        <tr>
+                            <td>{{ user.getPrenom() }}</td>
+                            <td>{{ user.getNom() }}</td>
+                            <td class="text-secondary"><a href="#" class="text-reset"><b>{{ user.getClasseId() }}</b></a></td>
+                            <td>
+                                <a href="#">Modifier</a>
+                            </td>
+                            <td>
+                                <a href="#" class="text-red">Supprimer</a>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col mt-3">
+                <a href="#add">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path>
+                    </svg>
+                </a>
+                <table class="table table-vcenter card-table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Début</th>
+                            <th>Fin</th>
+                            <th class="w-1"></th>
+                            <th class="w-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Gestionnaire de bibliothèque</td>
+                            <td>20-09-2023 15:25</td>
+                            <td>18-10-2023 17:15</td>
+                            <td>
+                                <a href="#">Modifier</a>
+                            </td>
+                            <td>
+                                <a href="#" class="text-red">Supprimer</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row mt-5 mb-4">
+            <h3><b>Gestionnaire de bibliothèque</b></h3>
+            <p>
+                Ajout, modification et suppression de livres dans une base de données. Recherche de livres par titre, auteur ou genre. Enregistrement des emprunts de livres par les utilisateurs.
+            </p>
+        </div>
+
+        <div class="row col-6">
+            <a href="#add">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path>
+                </svg>
+            </a>
+            <table class="table table-vcenter card-table table-striped">
+                <thead>
+                    <tr>
+                        <th>Ordre</th>
+                        <th>Description</th>
+                        <th>Progression</th>
+                        <th class="w-1"></th>
+                        <th class="w-1"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>CRUD Livre, Auteur et genre</td>
+                        <td class="text-green">TERMINEE</td>
+                        <td>
+                            <a href="#">Modifier</a>
+                        </td>
+                        <td>
+                            <a href="#" class="text-red">Supprimer</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-blur fade" id="modal-create-user" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Créer un utilisateur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                    Annuler
+                </a>
+                <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                    Créer
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/Storage/assets/js/searchUser.js" lang="js"></script>
