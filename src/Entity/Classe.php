@@ -6,6 +6,7 @@ use App\Repository\ClasseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ClasseRepository::class)]
 class Classe
@@ -13,15 +14,19 @@ class Classe
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("classe")]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("classe")]
     private ?string $designation = null;
 
     #[ORM\OneToMany(mappedBy: 'classe', targetEntity: Utilisateur::class)]
+    #[Groups("classe_utilisateur")]
     private Collection $utilisateurs;
 
     #[ORM\OneToMany(mappedBy: 'classe', targetEntity: Tp::class)]
+    #[Groups("classe_tp")]
     private Collection $tps;
 
     public function __construct()

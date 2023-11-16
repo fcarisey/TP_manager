@@ -27,12 +27,16 @@ form.addEventListener('keyup', (e) => {
                     row.innerHTML = `
                             <td>${item.prenom}</td>
                             <td>${item.nom}</td>
-                            <td class="text-secondary"><a href="#" class="text-reset"><b>${item.classe}</b></a></td>
+                            <td class="text-secondary"><a href="#" class="text-reset"><b>${item.classe.designation}</b></a></td>
                             <td>
-                                <a href="#">Modifier</a>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal-edit-user" onclick="userEdit('${item.classe.designation}')">
+                                    Modifier
+                                </a>
                             </td>
                             <td>
-                                <a href="#" class="text-red">Supprimer</a>
+                                <a href="#" class="text-red" data-bs-toggle="modal" data-bs-target="#modal-delete-user" onclick="userDelete('${item.id}')">
+                                    Supprimer
+                                </a>
                             </td>
                         `;
 
