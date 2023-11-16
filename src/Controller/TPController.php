@@ -2,23 +2,23 @@
 
 namespace App\Controller;
 
-use App\Entity\TP;
+use App\Entity\Tp;
 use App\Form\TPType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\TPRepository;
+use App\Repository\TpRepository;
 
 class TPController extends AbstractController
 {
     private EntityManagerInterface $em;
     private TPRepository $rep;
 
-    public function __construct(EntityManagerInterface $entityManager) {
+    public function __construct(EntityManagerInterface $entityManager, TpRepository $TPRepository) {
         $this->em = $entityManager;
-        $this->rep = $entityManager->getRepository(TP::class);
+        $this->rep = $TPRepository;
     }
 
     #[Route('/tp', name: 'app_tp')]
