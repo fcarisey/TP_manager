@@ -29,17 +29,24 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>Josué</td>
-                        <td>GUYON</td>
-                        <td class="text-secondary"><a href="#" class="text-reset"><b>SEGPA</b></a></td>
-                        <td>
-                            <a href="#">Modifier</a>
-                        </td>
-                        <td>
-                            <a href="#" class="text-red">Supprimer</a>
-                        </td>
-                    </tr>
+
+                    {% for user in users %}
+
+                        <tr>
+                            <td>{{ user.getPrenom() }}</td>
+                            <td>{{ user.getNom() }}</td>
+                            <td class="text-secondary"><a href="#" class="text-reset"><b>{{ user.getClasseId() }}</b></a></td>
+                            <td>
+                                <a href="#">Modifier</a>
+                            </td>
+                            <td>
+                                <a href="#" class="text-red">Supprimer</a>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+
                     </tbody>
                 </table>
             </div>

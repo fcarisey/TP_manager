@@ -13,8 +13,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class UtilisateurController extends AbstractController
 {
     #[Route('/utilisateur', name: 'app_utilisateur')]
-    public function index(Request $request): Response
+    public function index(Request $request, UtilisateurRepository $utilisateurRepository): Response
     {
+        $users = $utilisateurRepository->findAll();
+
         $form = $this->createForm(UtilisateurType::class);
 
         $form->handleRequest($request);
@@ -30,16 +32,17 @@ class UtilisateurController extends AbstractController
 
         return $this->render('utilisateur/index.html.twig', [
             'form' => $form,
+            'users' => $users,
         ]);
     }
 
     #[Route('/utilisateur/search', name: 'app_utilisateur_search')]
-    public function search(Request $request, UtilisateurRepository $utilisateurRepository): bool|string
+    public function search(Request $request, UtilisateurRepository $utilisateurRepository): Response
     {
         $s = $request->query->get('s');
 
         if (is_null($s))
-            return json_encode(['error' => 'Paramètre de recherche manquant']);
+            return new Response(json_encode(['error' => 'Paramètre de recherche manquant']), 400);
 
         $s_exploded = explode(' ', $s);
 
@@ -55,6 +58,6 @@ class UtilisateurController extends AbstractController
 
         $utilisateurs = $query->getQuery()->execute();
 
-        return new Response(json_encode($utilisateurs) , 200);
+        return new Response(json_encode($utilisateurs), 200);
     }
 }
