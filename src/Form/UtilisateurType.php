@@ -21,7 +21,7 @@ class UtilisateurType extends AbstractType
             ->add('motDePasse', PasswordType::class)
             ->add('courriel', EmailType::class)
             ->add('role')
-            ->add('classe_id_id', EntityType::class, [
+            ->add('classe_id', EntityType::class, [
                 'class' => Classe::class,
                 'choice_label' => 'designation',
                 'required' => false,

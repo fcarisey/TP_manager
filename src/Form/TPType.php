@@ -23,10 +23,12 @@ class TPType extends AbstractType
                 'required' => false
             ])
             ->add('date_debut', DateTimeType::class, [
-                'required' => false
+                'required' => false,
+                'widget' => 'single_text'
             ])
             ->add('date_fin', DateTimeType::class, [
-                'required' => false
+                'required' => false,
+                'widget' => 'single_text'
             ])
             ->add('classe_id', EntityType::class, [
                 'class' => Classe::class,
