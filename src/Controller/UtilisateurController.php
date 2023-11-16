@@ -5,44 +5,59 @@ namespace App\Controller;
 use App\Entity\Utilisateur;
 use App\Form\UtilisateurType;
 use App\Repository\UtilisateurRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UtilisateurController extends AbstractController
 {
-    #[Route('/utilisateur', name: 'app_utilisateur')]
-    public function index(Request $request, UtilisateurRepository $utilisateurRepository): Response
+    #[Route('/utilisateur', name: 'app_utilisateur', methods: ['GET', 'POST'])]
+    public function index(Request $request, EntityManagerInterface $entityManager, UtilisateurRepository $utilisateurRepository, ValidatorInterface $validator): Response
     {
         $users = $utilisateurRepository->findAll();
 
-        $form = $this->createForm(UtilisateurType::class);
+        $form_create = $this->createForm(UtilisateurType::class);
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $utilisateur = $form->getData();
-            $entityManager = $this->getDoctrine()->getManager();
+        $form_create->handleRequest($request);
+        if ($form_create->isSubmitted() && $form_create->isValid()) {
+            $utilisateur = $form_create->getData();
+
             $entityManager->persist($utilisateur);
-            $entityManager->save($utilisateur);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_utilisateur');
+        }
+
+        $form_edit = $this->createForm(UtilisateurType::class);
+
+        $form_edit->handleRequest($request);
+        if ($form_edit->isSubmitted() && $form_edit->isValid()) {
+            $utilisateur = $form_edit->getData();
+
+            $entityManager->persist($utilisateur);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_utilisateur');
         }
 
         return $this->render('utilisateur/index.html.twig', [
-            'form' => $form,
+            'form_create' => $form_create,
+            'form_edit' => $form_edit,
             'users' => $users,
         ]);
     }
 
-    #[Route('/utilisateur/search', name: 'app_utilisateur_search')]
+    #[Route('/utilisateur/search', name: 'app_utilisateur_search', methods: 'GET')]
     public function search(Request $request, UtilisateurRepository $utilisateurRepository): Response
     {
         $s = $request->query->get('s');
 
         if (is_null($s))
-            return new Response(json_encode(['error' => 'Paramètre de recherche manquant']), 400);
+            return $this->json(['error' => 'Paramètre de recherche manquant'], 400);
 
         $s_exploded = explode(' ', $s);
 
@@ -58,6 +73,23 @@ class UtilisateurController extends AbstractController
 
         $utilisateurs = $query->getQuery()->execute();
 
-        return new Response(json_encode($utilisateurs), 200);
+        $json = $this->container->get('serializer')->serialize($utilisateurs, 'json',[
+            'json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS,
+            'groups' => [
+                'utilisateur',
+                'utilisateur_classe',
+                'classe',
+            ]
+        ]);
+
+        return new JsonResponse($json, json: true);
+    }
+
+    #[Route('/utilisateur/{id}', name: 'utilisateur.delete', methods: 'DELETE')]
+    public function delete(Request $request, Utilisateur $utilisateur, EntityManagerInterface $entityManager): Response{
+        $entityManager->remove($utilisateur);
+        $entityManager->flush();
+
+        return $this->redirect($request->server->get('HTTP_REFERER'));
     }
 }

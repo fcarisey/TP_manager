@@ -35,17 +35,20 @@
                         <tr>
                             <td>{{ user.getPrenom() }}</td>
                             <td>{{ user.getNom() }}</td>
-                            <td class="text-secondary"><a href="#" class="text-reset"><b>{{ user.getClasseId() }}</b></a></td>
+                            <td class="text-secondary"><a href="#" class="text-reset"><b>{{ user.getClasse().getDesignation() }}</b></a></td>
                             <td>
-                                <a href="#">Modifier</a>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal-edit-user" onclick="userEdit('{{ user.getId() }}', '{{ user.getNom() }}', '{{ user.getPrenom() }}', '{{ user.getCourriel() }}', '{{ user.getClasse().getId() }}')">
+                                    Modifier
+                                </a>
                             </td>
                             <td>
-                                <a href="#" class="text-red">Supprimer</a>
+                                <a href="#" class="text-red" data-bs-toggle="modal" data-bs-target="#modal-delete-user" onclick="userDelete('{{ user.getId() }}')">
+                                    Supprimer
+                                </a>
                             </td>
                         </tr>
 
                     {% endfor %}
-
 
                     </tbody>
                 </table>
@@ -133,9 +136,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                {{ form_start(form) }}
-                {{ form_widget(form) }}
-                {{ form_end(form) }}
+                {{ form_start(form_create) }}
+                {{ form_widget(form_create) }}
+                {{ form_end(form_create) }}
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
@@ -150,4 +153,84 @@
     </div>
 </div>
 
+<div class="modal modal-blur fade" id="modal-edit-user" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Créer un utilisateur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{ form_start(form_edit) }}
+                {{ form_widget(form_edit) }}
+                {{ form_end(form_edit) }}
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                    Annuler
+                </a>
+                <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                    Créer
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-blur fade" id="modal-delete-user" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-status bg-danger"></div>
+            <div class="modal-body text-center py-4">
+                <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 9v4"></path><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"></path><path d="M12 16h.01"></path></svg>
+                <h3>Are you sure?</h3>
+                <div class="text-secondary">Voulez-vous vraiment supprimer cet utilisateur</div>
+            </div>
+            <div class="modal-footer">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                Annuler
+                            </a>
+                        </div>
+                        <div class="col">
+                            <form method="POST" action="" name="utilisateurDelete">
+                                <a href="#" class="btn btn-danger w-100" data-bs-dismiss="modal" onclick="javascript: this.parentNode.submit()">
+                                    Supprimer
+                                </a>
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete user') }}">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="/Storage/assets/js/searchUser.js" lang="js"></script>
+<script lang="js">
+    window.onload = () => {
+        document.forms.utilisateur.parentNode.parentNode.children[2].children[1].addEventListener('click', evt => {
+            document.forms.utilisateur.submit()
+        })
+    }
+
+    document.forms
+
+    function userDelete(id)
+    {
+        document.forms.utilisateurDelete.action = "/utilisateur/" + id
+        return 0;
+    }
+
+    function userDelete(id, nom, prenom, courriel, classe_id)
+    {
+        document.forms.utilisateurEdit.action = "/utilisateur/" + id
+        return 0;
+    }
+</script>
