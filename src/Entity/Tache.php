@@ -22,18 +22,19 @@ class Tache
     #[ORM\Column]
     private ?int $point = null;
 
-    #[ORM\ManyToOne(inversedBy: 'taches')]
-    private ?TP $TP_id = null;
-
-    #[ORM\ManyToMany(targetEntity: Utilisateur::class, inversedBy: 'taches')]
-    private Collection $utilisateurs;
-
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
+
+    #[ORM\ManyToOne(inversedBy: 'taches')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Tp $tp = null;
+
+    #[ORM\OneToMany(mappedBy: 'tache', targetEntity: TacheUtilisateur::class, orphanRemoval: true)]
+    private Collection $tacheUtilisateurs;
 
     public function __construct()
     {
-        $this->utilisateurs = new ArrayCollection();
+        $this->tacheUtilisateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -65,50 +66,56 @@ class Tache
         return $this;
     }
 
-    public function getTPId(): ?TP
-    {
-        return $this->TP_id;
-    }
-
-    public function setTPId(?TP $TP_id): static
-    {
-        $this->TP_id = $TP_id;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Utilisateur>
-     */
-    public function getUtilisateurs(): Collection
-    {
-        return $this->utilisateurs;
-    }
-
-    public function addUtilisateur(Utilisateur $utilisateur): static
-    {
-        if (!$this->utilisateurs->contains($utilisateur)) {
-            $this->utilisateurs->add($utilisateur);
-        }
-
-        return $this;
-    }
-
-    public function removeUtilisateur(Utilisateur $utilisateur): static
-    {
-        $this->utilisateurs->removeElement($utilisateur);
-
-        return $this;
-    }
-
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getTp(): ?Tp
+    {
+        return $this->tp;
+    }
+
+    public function setTp(?Tp $tp): static
+    {
+        $this->tp = $tp;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TacheUtilisateur>
+     */
+    public function getTacheUtilisateurs(): Collection
+    {
+        return $this->tacheUtilisateurs;
+    }
+
+    public function addTacheUtilisateur(TacheUtilisateur $tacheUtilisateur): static
+    {
+        if (!$this->tacheUtilisateurs->contains($tacheUtilisateur)) {
+            $this->tacheUtilisateurs->add($tacheUtilisateur);
+            $tacheUtilisateur->setTache($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTacheUtilisateur(TacheUtilisateur $tacheUtilisateur): static
+    {
+        if ($this->tacheUtilisateurs->removeElement($tacheUtilisateur)) {
+            // set the owning side to null (unless already changed)
+            if ($tacheUtilisateur->getTache() === $this) {
+                $tacheUtilisateur->setTache(null);
+            }
+        }
 
         return $this;
     }

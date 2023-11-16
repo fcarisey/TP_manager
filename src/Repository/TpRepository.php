@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\TP;
+use App\Entity\Tp;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<TP>
+ * @extends ServiceEntityRepository<Tp>
  *
- * @method TP|null find($id, $lockMode = null, $lockVersion = null)
- * @method TP|null findOneBy(array $criteria, array $orderBy = null)
- * @method TP[]    findAll()
- * @method TP[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Tp|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Tp|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Tp[]    findAll()
+ * @method Tp[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TPRepository extends ServiceEntityRepository
+class TpRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, TP::class);
+        parent::__construct($registry, Tp::class);
     }
 
 //    /**
-//     * @return TP[] Returns an array of TP objects
+//     * @return Tp[] Returns an array of Tp objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -36,7 +36,7 @@ class TPRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?TP
+//    public function findOneBySomeField($value): ?Tp
 //    {
 //        return $this->createQueryBuilder('t')
 //            ->andWhere('t.exampleField = :val')
