@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TpRepository::class)]
 class Tp
@@ -14,27 +15,35 @@ class Tp
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("tp")]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("tp")]
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups("tp")]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups("tp")]
     private ?\DateTimeInterface $date_debut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups("tp")]
     private ?\DateTimeInterface $date_fin = null;
 
     #[ORM\Column(type: Types::BLOB, nullable: true)]
+    #[Groups("tp_fichier")]
     private $fichier = null;
 
     #[ORM\ManyToOne(inversedBy: 'tps')]
+    #[Groups("tp_classe")]
     private ?Classe $classe = null;
 
     #[ORM\OneToMany(mappedBy: 'tp', targetEntity: Tache::class, orphanRemoval: true)]
+    #[Groups("tp_taches")]
     private Collection $taches;
 
     public function __construct()

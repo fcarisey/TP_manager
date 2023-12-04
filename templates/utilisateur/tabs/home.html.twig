@@ -32,12 +32,12 @@
 
                     {% for user in users %}
 
-                        <tr>
+                        <tr onclick="javascript: getTps('{{ user.getClasse().getId() | default("null") }}')">
                             <td>{{ user.getPrenom() }}</td>
                             <td>{{ user.getNom() }}</td>
-                            <td class="text-secondary"><a href="#" class="text-reset"><b>{{ user.getClasse().getDesignation() }}</b></a></td>
+                            <td class="text-secondary"><a href="#" class="text-reset"><b>{{ user.getClasse().getDesignation() | default("X") }}</b></a></td>
                             <td>
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal-edit-user" onclick="userEdit('{{ user.getId() }}', '{{ user.getNom() }}', '{{ user.getPrenom() }}', '{{ user.getCourriel() }}', '{{ user.getClasse().getId() }}')">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal-edit-user" onclick="userEdit('{{ user.getId() }}', '{{ user.getNom() }}', '{{ user.getPrenom() }}', '{{ user.getCourriel() }}', '{{ user.getClasse().getId() | default("null") }}')">
                                     Modifier
                                 </a>
                             </td>
@@ -60,7 +60,7 @@
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path>
                     </svg>
                 </a>
-                <table class="table table-vcenter card-table table-striped">
+                <table class="table table-vcenter card-table table-striped" id="tp_table">
                     <thead>
                         <tr>
                             <th>Titre</th>
@@ -71,17 +71,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Gestionnaire de bibliothèque</td>
-                            <td>20-09-2023 15:25</td>
-                            <td>18-10-2023 17:15</td>
-                            <td>
-                                <a href="#">Modifier</a>
-                            </td>
-                            <td>
-                                <a href="#" class="text-red">Supprimer</a>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -128,6 +117,8 @@
     </div>
 </div>
 
+{#USER#}
+
 <div class="modal modal-blur fade" id="modal-create-user" tabindex="-1" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -136,9 +127,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                {{ form_start(form_create) }}
-                {{ form_widget(form_create) }}
-                {{ form_end(form_create) }}
+                {{ form_start(form_user_create) }}
+                {{ form_widget(form_user_create) }}
+                {{ form_end(form_user_create) }}
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
@@ -157,13 +148,13 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Créer un utilisateur</h5>
+                <h5 class="modal-title">Modifier un utilisateur</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                {{ form_start(form_edit) }}
-                {{ form_widget(form_edit) }}
-                {{ form_end(form_edit) }}
+                {{ form_start(form_user_edit, {'attr': {'name': "utilisateurEdit"}}) }}
+                {{ form_widget(form_user_edit) }}
+                {{ form_end(form_user_edit) }}
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
@@ -171,7 +162,7 @@
                 </a>
                 <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
-                    Créer
+                    Modifier
                 </a>
             </div>
         </div>
@@ -212,6 +203,93 @@
     </div>
 </div>
 
+{#TP#}
+
+<div class="modal modal-blur fade" id="modal-create-tp" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Créer un TP</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{ form_start(form_tp_create) }}
+                {{ form_widget(form_tp_create) }}
+                {{ form_end(form_tp_create) }}
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                    Annuler
+                </a>
+                <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                    Créer
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-blur fade" id="modal-edit-tp" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier un TP</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{ form_start(form_tp_edit, {'attr': {'name': "utilisateurEdit"}}) }}
+                {{ form_widget(form_tp_edit) }}
+                {{ form_end(form_tp_edit) }}
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                    Annuler
+                </a>
+                <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                    Modifier
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-blur fade" id="modal-delete-tp" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-status bg-danger"></div>
+            <div class="modal-body text-center py-4">
+                <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 9v4"></path><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"></path><path d="M12 16h.01"></path></svg>
+                <h3>Are you sure?</h3>
+                <div class="text-secondary">Voulez-vous vraiment supprimer ce TP</div>
+            </div>
+            <div class="modal-footer">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                Annuler
+                            </a>
+                        </div>
+                        <div class="col">
+                            <form method="POST" action="" name="tpDelete">
+
+                                <a href="#" class="btn btn-danger w-100" data-bs-dismiss="modal" onclick="javascript: this.parentNode.submit()">
+                                    Supprimer
+                                </a>
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete tp') }}">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="/Storage/assets/js/searchUser.js" lang="js"></script>
 <script lang="js">
     window.onload = () => {
@@ -228,9 +306,78 @@
         return 0;
     }
 
-    function userDelete(id, nom, prenom, courriel, classe_id)
+    function userEdit(id, nom, prenom, courriel, classe_id)
     {
-        document.forms.utilisateurEdit.action = "/utilisateur/" + id
+        const form = document.forms[2]
+
+        form.action = "/utilisateur/" + id
+
+        form['utilisateur[nom]'].value = nom;
+        form['utilisateur[prenom]'].value = prenom;
+        form['utilisateur[courriel]'].value = courriel;
+
+        Array.from(form['utilisateur[classe]'].getElementsByTagName('option')).forEach((v, i) => {
+            if (v.value === classe_id)
+                form['utilisateur[classe]'].selectedIndex = i;
+        })
+
         return 0;
+    }
+
+    function getTps(classe_id){
+        if (classe_id === null)
+            return
+
+        let table = document.getElementById("tp_table");
+        table.children[1].innerHTML = null;
+
+        fetch('/utilisateur/search/tp?classe_id=' + classe_id, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+
+                data.forEach((item) => {
+                    let date_debut = new Intl.DateTimeFormat('fr-FR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        timeZone: 'UTC'
+                    }).format(new Date(item.date_debut));
+
+                    let date_fin = new Intl.DateTimeFormat('fr-FR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        timeZone: 'UTC'
+                    }).format(new Date(item.date_fin));
+
+                    const row = `
+                        <tr>
+                            <td>${item.titre}</td>
+                            <td>${date_debut}</td>
+                            <td>${date_fin}</td>
+                            <td>
+                                <a href="#"
+                                data-bs-toggle="modal" data-bs-target="#modal-edit-tp" onclick="tpEdit('${item.classe.designation}')">
+                                    Modifier
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" class="text-red" data-bs-toggle="modal" data-bs-target="#modal-delete-tp" onclick="tpDelete('${item.id}')">
+                                    Supprimer
+                                </a>
+                            </td>
+                        </tr>
+                    `;
+
+                    table.children[1].insertAdjacentHTML('beforeend', row);
+                });
+            })
+            .catch(error => console.log(error));
     }
 </script>

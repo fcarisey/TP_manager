@@ -23,13 +23,16 @@ form.addEventListener('keyup', (e) => {
                 table.children[1].innerText = '';
 
                 data.forEach((item) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
+                    const row = `
+                        <tr onclick="javascript: getTps('${item.classe.id}')">
                             <td>${item.prenom}</td>
                             <td>${item.nom}</td>
                             <td class="text-secondary"><a href="#" class="text-reset"><b>${item.classe.designation}</b></a></td>
                             <td>
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal-edit-user" onclick="userEdit('${item.classe.designation}')">
+                                <a href="#" 
+                                
+                                
+                                data-bs-toggle="modal" data-bs-target="#modal-edit-user" onclick="userEdit('${item.classe.designation}')">
                                     Modifier
                                 </a>
                             </td>
@@ -38,9 +41,10 @@ form.addEventListener('keyup', (e) => {
                                     Supprimer
                                 </a>
                             </td>
-                        `;
+                        </tr>
+                    `;
 
-                    table.children[1].insertAdjacentElement('beforeend', row);
+                    table.children[1].insertAdjacentHTML('beforeend', row);
                 });
             })
             .catch(error => console.log(error));

@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Utilisateur;
+use App\Form\TPType;
 use App\Form\UtilisateurType;
+use App\Repository\TpRepository;
 use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,16 +17,34 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UtilisateurController extends AbstractController
 {
-    #[Route('/utilisateur', name: 'app_utilisateur', methods: ['GET', 'POST'])]
-    public function index(Request $request, EntityManagerInterface $entityManager, UtilisateurRepository $utilisateurRepository, ValidatorInterface $validator): Response
+    #[Route('/utilisateur', name: 'app_utilisateur', methods: ['GET', 'POST', 'PATCH'])]
+    public function index(Request $request, EntityManagerInterface $entityManager, UtilisateurRepository $utilisateurRepository, TpRepository $tpRepository ,ValidatorInterface $validator): Response
     {
         $users = $utilisateurRepository->findAll();
 
-        $form_create = $this->createForm(UtilisateurType::class);
+        $form_user_create = $this->createForm(UtilisateurType::class);
 
-        $form_create->handleRequest($request);
-        if ($form_create->isSubmitted() && $form_create->isValid()) {
-            $utilisateur = $form_create->getData();
+        $form_user_create->handleRequest($request);
+        if ($form_user_create->isSubmitted() && $form_user_create->isValid()) {
+            $utilisateur = $form_user_create->getData();
+
+            $entityManager->persist($utilisateur);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_utilisateur');
+        }
+
+        $form_user_edit = $this->createForm(UtilisateurType::class, null ,[
+            'method' => 'PATCH',
+            'attr' => [
+                'name' => "utilisateurEdit"
+            ]
+        ]);
+
+        $form_user_edit->handleRequest($request);
+
+        if ($form_user_edit->isSubmitted() && $form_user_edit->isValid()) {
+            $utilisateur = $form_user_edit->getData();
 
             $entityManager->persist($utilisateur);
             $entityManager->flush();
@@ -32,21 +52,45 @@ class UtilisateurController extends AbstractController
             return $this->redirectToRoute('app_utilisateur');
         }
 
-        $form_edit = $this->createForm(UtilisateurType::class);
+        $tps = $tpRepository->findAll();
 
-        $form_edit->handleRequest($request);
-        if ($form_edit->isSubmitted() && $form_edit->isValid()) {
-            $utilisateur = $form_edit->getData();
+        $form_tp_create = $this->createForm(TPType::class);
 
-            $entityManager->persist($utilisateur);
+        $form_tp_create->handleRequest($request);
+        if ($form_tp_create->isSubmitted() && $form_tp_create->isValid()) {
+            $tp = $form_tp_create->getData();
+
+            $entityManager->persist($tp);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_utilisateur');
         }
+
+        $form_tp_edit = $this->createForm(TPType::class, null ,[
+            'method' => 'PATCH',
+            'attr' => [
+                'name' => "utilisateurEdit"
+            ]
+        ]);
+
+        $form_tp_edit->handleRequest($request);
+
+        if ($form_tp_edit->isSubmitted() && $form_tp_edit->isValid()) {
+            $tp = $form_tp_edit->getData();
+
+            $entityManager->persist($tp);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_utilisateur');
+        }
+
+
 
         return $this->render('utilisateur/index.html.twig', [
-            'form_create' => $form_create,
-            'form_edit' => $form_edit,
+            'form_user_create' => $form_user_create,
+            'form_user_edit' => $form_user_edit,
+            'form_tp_create' => $form_tp_create,
+            'form_tp_edit' => $form_tp_edit,
             'users' => $users,
         ]);
     }
@@ -79,6 +123,32 @@ class UtilisateurController extends AbstractController
                 'utilisateur',
                 'utilisateur_classe',
                 'classe',
+            ]
+        ]);
+
+        return new JsonResponse($json, json: true);
+    }
+
+    #[Route('/utilisateur/search/tp', name: 'app_utilisateur_tp_search', methods: 'GET')]
+    public function searchTp(Request $request, TpRepository $tpRepository): Response
+    {
+        $s = $request->query->get('classe_id');
+
+        if (is_null($s))
+            return $this->json(['error' => 'Paramètre de recherche manquant'], 400);
+
+        $query = $tpRepository->createQueryBuilder('t')
+            ->orderBy('t.date_debut', 'ASC')
+            ->where('t.classe = :id')
+            ->setParameter('id', $s);
+
+        $tps = $query->getQuery()->execute();
+
+        $json = $this->container->get('serializer')->serialize($tps, 'json',[
+            'json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS,
+            'groups' => [
+                'tp',
+                'tp_classe'
             ]
         ]);
 

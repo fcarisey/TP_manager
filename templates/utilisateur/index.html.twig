@@ -2,6 +2,20 @@
 
 {% block title %}Utilisateurs{% endblock %}
 
+{% block stylesheets %}
+
+    <style lang="css">
+
+        #home #search_table tbody tr:hover{
+            cursor: pointer;
+            --user-hover: rgba(76, 143, 210, 0.55);
+            background-color: var(--user-hover);
+            --tblr-table-striped-bg: var(--user-hover);
+        }
+    </style>
+
+{% endblock %}
+
 {% block header %}
 
     <nav class="nav navbar justify-content-start" id="subtabs">
