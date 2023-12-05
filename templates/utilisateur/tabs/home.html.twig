@@ -55,12 +55,12 @@
             </div>
 
             <div class="col mt-3">
-                <a href="#add">
+                <a href="#modal-create-tp" data-bs-toggle="modal" data-bs-target="#modal-create-tp" class="col-1 align-self-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path>
                     </svg>
                 </a>
-                <table class="table table-vcenter card-table table-striped" id="tp_table">
+                <table class="table table-vcenter card-table table-striped" id="tp_table" data-classeId="-1">
                     <thead>
                         <tr>
                             <th>Titre</th>
@@ -296,6 +296,10 @@
         document.forms.utilisateur.parentNode.parentNode.children[2].children[1].addEventListener('click', evt => {
             document.forms.utilisateur.submit()
         })
+
+        document.forms.tp.parentNode.parentNode.children[2].children[1].addEventListener('click', evt => {
+            document.forms.tp.submit()
+        })
     }
 
     document.forms
@@ -328,8 +332,15 @@
         if (classe_id === null)
             return
 
+        Array(document.forms.tp.options).forEach((e, i, a) => {
+            console.log(a)
+        })
+
+        //document.forms.tp.elemtents.tp_classe
+
         let table = document.getElementById("tp_table");
         table.children[1].innerHTML = null;
+        table.dataset.classeid = classe_id;
 
         fetch('/utilisateur/search/tp?classe_id=' + classe_id, {
             method: 'GET',
@@ -363,7 +374,7 @@
                             <td>${date_fin}</td>
                             <td>
                                 <a href="#"
-                                data-bs-toggle="modal" data-bs-target="#modal-edit-tp" onclick="tpEdit('${item.classe.designation}')">
+                                data-bs-toggle="modal" data-bs-target="#modal-edit-tp" data-title="${item.titre}" data-description="${item.description}" data-dateDebut="${item.dateDebut}" data-dateFin="${item.date_fin}" onclick="tpEdit(this)">
                                     Modifier
                                 </a>
                             </td>

@@ -52,8 +52,6 @@ class UtilisateurController extends AbstractController
             return $this->redirectToRoute('app_utilisateur');
         }
 
-        $tps = $tpRepository->findAll();
-
         $form_tp_create = $this->createForm(TPType::class);
 
         $form_tp_create->handleRequest($request);
@@ -69,7 +67,7 @@ class UtilisateurController extends AbstractController
         $form_tp_edit = $this->createForm(TPType::class, null ,[
             'method' => 'PATCH',
             'attr' => [
-                'name' => "utilisateurEdit"
+                'name' => "tpEdit"
             ]
         ]);
 
@@ -83,8 +81,6 @@ class UtilisateurController extends AbstractController
 
             return $this->redirectToRoute('app_utilisateur');
         }
-
-
 
         return $this->render('utilisateur/index.html.twig', [
             'form_user_create' => $form_user_create,
