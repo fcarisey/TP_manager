@@ -324,8 +324,6 @@
             if (v.value === classe_id)
                 form['utilisateur[classe]'].selectedIndex = i;
         })
-
-        return 0;
     }
 
     function getTps(classe_id){
@@ -367,6 +365,8 @@
                         timeZone: 'UTC'
                     }).format(new Date(item.date_fin));
 
+                    console.log(item)
+
                     const row = `
                         <tr>
                             <td>${item.titre}</td>
@@ -374,7 +374,7 @@
                             <td>${date_fin}</td>
                             <td>
                                 <a href="#"
-                                data-bs-toggle="modal" data-bs-target="#modal-edit-tp" data-title="${item.titre}" data-description="${item.description}" data-dateDebut="${item.dateDebut}" data-dateFin="${item.date_fin}" onclick="tpEdit(this)">
+                                data-bs-toggle="modal" data-bs-target="#modal-edit-tp" data-id="${item.id}" data-title="${item.titre}" data-description="${item.description}" data-classe="${item.classe.id}" data-dateDebut="${item.date_debut}" data-dateFin="${item.date_fin}" onclick="tpEdit(this)">
                                     Modifier
                                 </a>
                             </td>
@@ -390,5 +390,27 @@
                 });
             })
             .catch(error => console.log(error));
+    }
+
+    function tpEdit(elem){
+        let form = document.forms[5]
+
+        form.action = "/utilisateur/" + elem.dataset.id
+
+        let date = new Date(elem.dataset.datedebut);
+        let date_debut = date.toISOString().slice(0, 16).replace('T', ' ');
+
+        date = new Date(elem.dataset.datefin);
+        let date_fin = date.toISOString().slice(0, 16).replace('T', ' ');
+
+        form['tp[titre]'].value = elem.dataset.title
+        form['tp[description]'].value = elem.dataset.description
+        form['tp[date_debut]'].value = date_debut
+        form['tp[date_fin]'].value = date_fin
+
+        Array.from(form['tp[classe]'].getElementsByTagName('option')).forEach((v, i) => {
+            if (v.value === elem.dataset.classe)
+                form['tp[classe]'].selectedIndex = i;
+        })
     }
 </script>

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Utilisateur;
 use App\Form\TPType;
 use App\Form\UtilisateurType;
+use App\Repository\ClasseRepository;
 use App\Repository\TpRepository;
 use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -126,7 +127,7 @@ class UtilisateurController extends AbstractController
     }
 
     #[Route('/utilisateur/search/tp', name: 'app_utilisateur_tp_search', methods: 'GET')]
-    public function searchTp(Request $request, TpRepository $tpRepository): Response
+    public function searchTp(Request $request, TpRepository $tpRepository, ClasseRepository $classRepository): Response
     {
         $s = $request->query->get('classe_id');
 
@@ -144,7 +145,8 @@ class UtilisateurController extends AbstractController
             'json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS,
             'groups' => [
                 'tp',
-                'tp_classe'
+                'tp_classe',
+                'classe',
             ]
         ]);
 
